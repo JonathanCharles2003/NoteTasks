@@ -8,29 +8,31 @@ import org.springframework.web.bind.MethodArgumentNotValidException;
 import org.springframework.web.bind.annotation.ControllerAdvice;
 import org.springframework.web.bind.annotation.ExceptionHandler;
 
+import jakarta.servlet.http.HttpServletRequest;
+
 @ControllerAdvice
 public class GlobalExceptionHandler {
 	
 	@ExceptionHandler(AppException.class)
-	public ResponseEntity<ApiError> handleAppExceptions(AppException ex){
-		ApiError error = new ApiError(ex.getStatus().value(), ex.getMessage());
+	public ResponseEntity<ApiError> handleAppExceptions(AppException ex, HttpServletRequest request){
+		ApiError error = new ApiError(ex.getStatus().value(),ex.getStatus().getReasonPhrase(), ex.getMessage(), request.getRequestURI());
 		return new ResponseEntity<>(error, ex.getStatus());
 	}
 	
 	@ExceptionHandler(MethodArgumentNotValidException.class)
-	public ResponseEntity<ApiError> handleValidationExceptions(MethodArgumentNotValidException ex) {
-	    String errors = ex.getBindingResult().getFieldErrors()
+	public ResponseEntity<ApiError> handleValidationExceptions(MethodArgumentNotValidException ex, HttpServletRequest request) {
+	    String errorMessages = ex.getBindingResult().getFieldErrors()
 	                      .stream()
 	                      .map(fieldError -> fieldError.getDefaultMessage())
 	                      .collect(Collectors.joining(", "));
-	    ApiError error = new ApiError(HttpStatus.BAD_REQUEST.value(), errors);
+	    ApiError error = new ApiError(HttpStatus.BAD_REQUEST.value(),HttpStatus.BAD_REQUEST.getReasonPhrase(), errorMessages, request.getRequestURI());
 	    return new ResponseEntity<>(error, HttpStatus.BAD_REQUEST);
 	}
 	
 	@ExceptionHandler(Exception.class)
-	public ResponseEntity<ApiError> handleUnexpectedExceptions(Exception ex) {
-	    ApiError error = new ApiError(HttpStatus.INTERNAL_SERVER_ERROR.value(),
-	                                  "An unexpected error occurred");
+	public ResponseEntity<ApiError> handleUnexpectedExceptions(Exception ex, HttpServletRequest request) {
+	    ApiError error = new ApiError(HttpStatus.INTERNAL_SERVER_ERROR.value(),HttpStatus.INTERNAL_SERVER_ERROR.getReasonPhrase(),
+	                                  "An unexpected error occurred",request.getRequestURI());
 	    return new ResponseEntity<>(error, HttpStatus.INTERNAL_SERVER_ERROR);
 	}
 	
