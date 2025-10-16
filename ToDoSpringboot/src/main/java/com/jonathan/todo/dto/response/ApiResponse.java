@@ -1,43 +1,36 @@
-package com.jonathan.todo.exception;
+package com.jonathan.todo.dto.response;
 
 import java.time.OffsetDateTime;
 
 import com.fasterxml.jackson.annotation.JsonPropertyOrder;
 
-@JsonPropertyOrder({ "timestamp", "status","error", "message", "path" })
-public class ApiError {
-	
+@JsonPropertyOrder({"timestamp","status","message","data"})
+public class ApiResponse<T> {
 	private final OffsetDateTime timestamp = OffsetDateTime.now();
 	private final int status;
-	private final String error;
 	private final String message;
-	private final String path;
+	private final T data;
 	
-	public ApiError(int status, String error, String message, String path) {
+	public ApiResponse(int status, String message, T data) {
 		this.status = status;
-		this.error = error;
 		this.message = message;
-		this.path = path;
+		this.data = data;
 	}
 
 	public OffsetDateTime getTimestamp() {
 		return timestamp;
 	}
-	
+
+
 	public int getStatus() {
 		return status;
 	}
-	
-	public String getError() {
-		return error;
-	}
-	
+
 	public String getMessage() {
 		return message;
 	}
 
-	public String getPath() {
-		return path;
+	public T getData() {
+		return data;
 	}
-	
 }
