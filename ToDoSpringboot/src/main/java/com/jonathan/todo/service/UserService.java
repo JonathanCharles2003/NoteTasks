@@ -22,4 +22,9 @@ public class UserService {
 	public Optional<User> getUserByName(String username) {
 		return userRepo.findByUsername(username);	
 	}
+	
+	public boolean checkUserExists(String username) {
+		return userRepo.existsByUsername(username);
+	}
+	
 }

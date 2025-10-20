@@ -21,7 +21,6 @@ public class ApiResponse<T> {
 		return timestamp;
 	}
 
-
 	public int getStatus() {
 		return status;
 	}
