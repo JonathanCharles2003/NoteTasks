@@ -2,6 +2,8 @@ package com.jonathan.todo.service;
 
 import java.util.Optional;
 
+import org.springframework.context.MessageSource;
+import org.springframework.context.i18n.LocaleContextHolder;
 import org.springframework.dao.DataIntegrityViolationException;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
@@ -20,10 +22,12 @@ import jakarta.transaction.Transactional;
 public class AuthService {
 	private final UserService userService;
 	private final PasswordEncoder passwordEncoder;
+	public final MessageSource messageSource;
 	
-	public AuthService(UserService userService, PasswordEncoder passwordEncoder) {
+	public AuthService(UserService userService, PasswordEncoder passwordEncoder, MessageSource messageSource) {
 	    this.userService = userService;
 	    this.passwordEncoder = passwordEncoder;
+	    this.messageSource = messageSource;
 	}
 	
 	@Transactional
@@ -37,14 +41,14 @@ public class AuthService {
 			return new RegisterResponse(savedUser.getUserId(), savedUser.getUsername(), savedUser.getCreatedAt());
 		}
 		catch(DataIntegrityViolationException ex) {
-			throw new UserAlreadyExistsException("Username already exists");
+			throw new UserAlreadyExistsException(messageSource.getMessage("user.exists", null, LocaleContextHolder.getLocale()));
 		}
 	}
 	
 	public LoginResponse loginUser(LoginRequest request) {
 		Optional<User> optUser = userService.getUserByName(request.getUsername());
 		if(optUser.isEmpty() || !passwordEncoder.matches(request.getPassword(), optUser.get().getPassword())) {
-	            throw new InvalidCredentialsException("Invalid username or password");
+	            throw new InvalidCredentialsException(messageSource.getMessage("user.invalid.credentials", null, LocaleContextHolder.getLocale()));
 
 		}
 		return new LoginResponse(optUser.get().getUserId(), optUser.get().getUsername());

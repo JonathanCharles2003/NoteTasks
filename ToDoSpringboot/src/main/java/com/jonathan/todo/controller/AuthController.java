@@ -1,5 +1,7 @@
 package com.jonathan.todo.controller;
 
+import org.springframework.context.MessageSource;
+import org.springframework.context.i18n.LocaleContextHolder;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.validation.annotation.Validated;
@@ -23,15 +25,18 @@ import jakarta.validation.Valid;
 public class AuthController {
 	
     private final AuthService authService;
+    public final MessageSource messageSource;
 
-    public AuthController(AuthService authService) {
+    public AuthController(AuthService authService, MessageSource messageSource) {
         this.authService = authService;
+        this.messageSource = messageSource;
     }
 	
 	@PostMapping("/register")
 	public ResponseEntity<ApiResponse<RegisterResponse>> register(@Valid @RequestBody RegisterRequest request) {
 		RegisterResponse registerResponse = authService.registerUser(request);
-		ApiResponse<RegisterResponse> apiResponse = new ApiResponse<>(HttpStatus.CREATED.value(), "User Registered Successfully", registerResponse);
+		String successMessage = messageSource.getMessage("user.register.success", null, LocaleContextHolder.getLocale());
+		ApiResponse<RegisterResponse> apiResponse = new ApiResponse<>(HttpStatus.CREATED.value(), successMessage, registerResponse);
 		return ResponseEntity.status(HttpStatus.CREATED).body(apiResponse);
 	}
 	
