@@ -1,7 +1,5 @@
 package com.jonathan.todo.controller;
 
-import org.springframework.context.MessageSource;
-import org.springframework.context.i18n.LocaleContextHolder;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.validation.annotation.Validated;
@@ -16,6 +14,7 @@ import com.jonathan.todo.dto.response.ApiResponse;
 import com.jonathan.todo.dto.response.LoginResponse;
 import com.jonathan.todo.dto.response.RegisterResponse;
 import com.jonathan.todo.service.AuthService;
+import com.jonathan.todo.util.MessageUtil;
 import com.jonathan.todo.validation.OnLogin;
 
 import jakarta.validation.Valid;
@@ -25,17 +24,17 @@ import jakarta.validation.Valid;
 public class AuthController {
 	
     private final AuthService authService;
-    public final MessageSource messageSource;
+    private final MessageUtil messageUtil;
 
-    public AuthController(AuthService authService, MessageSource messageSource) {
+    public AuthController(AuthService authService, MessageUtil messageUtil) {
         this.authService = authService;
-        this.messageSource = messageSource;
+        this.messageUtil = messageUtil;
     }
 	
 	@PostMapping("/register")
 	public ResponseEntity<ApiResponse<RegisterResponse>> register(@Valid @RequestBody RegisterRequest request) {
 		RegisterResponse registerResponse = authService.registerUser(request);
-		String successMessage = messageSource.getMessage("user.register.success", null, LocaleContextHolder.getLocale());
+		String successMessage =  messageUtil.getMessage("user.register.success");
 		ApiResponse<RegisterResponse> apiResponse = new ApiResponse<>(HttpStatus.CREATED.value(), successMessage, registerResponse);
 		return ResponseEntity.status(HttpStatus.CREATED).body(apiResponse);
 	}
@@ -43,7 +42,8 @@ public class AuthController {
 	@PostMapping("/login")
 	public ResponseEntity<ApiResponse<LoginResponse>> login(@Validated(OnLogin.class) @RequestBody LoginRequest request){
 		LoginResponse loginResponse = authService.loginUser(request);
-		ApiResponse<LoginResponse> apiResponse = new ApiResponse<>(HttpStatus.OK.value(), "Login Successful", loginResponse);
+		String successMessage =  messageUtil.getMessage("user.login.success");
+		ApiResponse<LoginResponse> apiResponse = new ApiResponse<>(HttpStatus.OK.value(), successMessage, loginResponse);
 		return ResponseEntity.ok(apiResponse); 
 	}
 }

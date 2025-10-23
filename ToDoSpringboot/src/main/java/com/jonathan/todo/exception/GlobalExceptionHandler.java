@@ -8,11 +8,19 @@ import org.springframework.web.bind.MethodArgumentNotValidException;
 import org.springframework.web.bind.annotation.ControllerAdvice;
 import org.springframework.web.bind.annotation.ExceptionHandler;
 
+import com.jonathan.todo.util.MessageUtil;
+
 import jakarta.servlet.http.HttpServletRequest;
 
 @ControllerAdvice
 public class GlobalExceptionHandler {
 	
+	private final MessageUtil messageUtil;
+	
+	public GlobalExceptionHandler(MessageUtil messageUtil) {
+		this.messageUtil = messageUtil;
+	}
+
 	@ExceptionHandler(AppException.class)
 	public ResponseEntity<ApiError> handleAppExceptions(AppException ex, HttpServletRequest request){
 		ApiError error = new ApiError(ex.getStatus().value(),ex.getStatus().getReasonPhrase(), ex.getMessage(), request.getRequestURI());
@@ -31,8 +39,9 @@ public class GlobalExceptionHandler {
 	
 	@ExceptionHandler(Exception.class)
 	public ResponseEntity<ApiError> handleUnexpectedExceptions(Exception ex, HttpServletRequest request) {
+		String errorMessage = messageUtil.getMessage("error.unexpected");
 	    ApiError error = new ApiError(HttpStatus.INTERNAL_SERVER_ERROR.value(),HttpStatus.INTERNAL_SERVER_ERROR.getReasonPhrase(),
-	                                  "An unexpected error occurred",request.getRequestURI());
+	    		errorMessage,request.getRequestURI());
 	    return new ResponseEntity<>(error, HttpStatus.INTERNAL_SERVER_ERROR);
 	}
 	

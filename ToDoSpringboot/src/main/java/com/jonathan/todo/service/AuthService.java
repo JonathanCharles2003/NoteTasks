@@ -2,8 +2,6 @@ package com.jonathan.todo.service;
 
 import java.util.Optional;
 
-import org.springframework.context.MessageSource;
-import org.springframework.context.i18n.LocaleContextHolder;
 import org.springframework.dao.DataIntegrityViolationException;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
@@ -15,6 +13,7 @@ import com.jonathan.todo.dto.response.RegisterResponse;
 import com.jonathan.todo.exception.InvalidCredentialsException;
 import com.jonathan.todo.exception.UserAlreadyExistsException;
 import com.jonathan.todo.model.User;
+import com.jonathan.todo.util.MessageUtil;
 
 import jakarta.transaction.Transactional;
 
@@ -22,12 +21,12 @@ import jakarta.transaction.Transactional;
 public class AuthService {
 	private final UserService userService;
 	private final PasswordEncoder passwordEncoder;
-	public final MessageSource messageSource;
+	private final MessageUtil messageUtil;
 	
-	public AuthService(UserService userService, PasswordEncoder passwordEncoder, MessageSource messageSource) {
+	public AuthService(UserService userService, PasswordEncoder passwordEncoder, MessageUtil messageUtil) {
 	    this.userService = userService;
 	    this.passwordEncoder = passwordEncoder;
-	    this.messageSource = messageSource;
+	    this.messageUtil = messageUtil;
 	}
 	
 	@Transactional
@@ -41,14 +40,14 @@ public class AuthService {
 			return new RegisterResponse(savedUser.getUserId(), savedUser.getUsername(), savedUser.getCreatedAt());
 		}
 		catch(DataIntegrityViolationException ex) {
-			throw new UserAlreadyExistsException(messageSource.getMessage("user.exists", null, LocaleContextHolder.getLocale()));
+			throw new UserAlreadyExistsException(messageUtil.getMessage("user.exists"));
 		}
 	}
 	
 	public LoginResponse loginUser(LoginRequest request) {
 		Optional<User> optUser = userService.getUserByName(request.getUsername());
 		if(optUser.isEmpty() || !passwordEncoder.matches(request.getPassword(), optUser.get().getPassword())) {
-	            throw new InvalidCredentialsException(messageSource.getMessage("user.invalid.credentials", null, LocaleContextHolder.getLocale()));
+	            throw new InvalidCredentialsException(messageUtil.getMessage("user.invalid.credentials"));
 
 		}
 		return new LoginResponse(optUser.get().getUserId(), optUser.get().getUsername());
