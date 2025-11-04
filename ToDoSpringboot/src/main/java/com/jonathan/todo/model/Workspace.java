@@ -29,7 +29,7 @@ public class Workspace {
 	@JoinColumn(name = "user_id", nullable = false)
 	private User user;
 	
-	@Column(nullable = false, unique = true, length = 100)
+	@Column(nullable = false, length = 100)
 	private String workspaceName;
 	
 	@CreatedDate
@@ -39,70 +39,36 @@ public class Workspace {
 	@LastModifiedDate
 	private LocalDateTime updatedAt;
 	
-	
 	private LocalDateTime deletedAt;
-
 
 	public Long getWorkspaceId() {
 		return workspaceId;
 	}
-
-
 	public User getUser() {
 		return user;
 	}
-
-
 	public void setUser(User user) {
 		this.user = user;
 	}
-
-
 	public String getWorkspaceName() {
 		return workspaceName;
 	}
-
-
 	public void setWorkspaceName(String workspaceName) {
 		this.workspaceName = workspaceName;
 	}
-
-
 	public LocalDateTime getCreatedAt() {
 		return createdAt;
 	}
-
-
-	public void setCreatedAt(LocalDateTime createdAt) {
-		this.createdAt = createdAt;
-	}
-
-
 	public LocalDateTime getUpdatedAt() {
 		return updatedAt;
 	}
-
-
-	public void setUpdatedAt(LocalDateTime updatedAt) {
-		this.updatedAt = updatedAt;
-	}
-
-
 	public LocalDateTime getDeletedAt() {
 		return deletedAt;
 	}
-
-
 	public void setDeletedAt(LocalDateTime deletedAt) {
 		this.deletedAt = deletedAt;
 	}
-
-
 	public void setWorkspaceId(Long workspaceId) {
 		this.workspaceId = workspaceId;
 	}
-	
-	
-	
-	
 }
