@@ -3,6 +3,7 @@ package com.jonathan.todo.service;
 import java.util.List;
 
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
 import com.jonathan.todo.dto.response.WorkspaceResponseDTO;
 import com.jonathan.todo.model.Workspace;
@@ -16,6 +17,7 @@ public class WorkspaceService {
 		this.workspaceRepo = workspaceRepo;
 	}
 	
+	@Transactional(readOnly = true)
 	public List<WorkspaceResponseDTO> getWorkspacesByUserId(Long userId) {
 		List<Workspace> workspaces = workspaceRepo.findByUserUserIdAndDeletedAtIsNull(userId);
 		return workspaces.stream()
@@ -26,6 +28,4 @@ public class WorkspaceService {
 						workspace.getUpdatedAt()))
 				.toList();
 	}
-	
-
 }
