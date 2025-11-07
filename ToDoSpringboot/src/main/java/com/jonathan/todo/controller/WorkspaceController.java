@@ -32,10 +32,7 @@ public class WorkspaceController {
 		String message =  workspaces.isEmpty() 
 				? messageUtil.getMessage("workspace.notfound") 
 				: messageUtil.getMessage("workspace.fetch.success");
-		HttpStatus status = workspaces.isEmpty() 
-				? HttpStatus.NO_CONTENT
-				: HttpStatus.OK;
-		ApiResponse<List<WorkspaceResponseDTO>> apiResponse = new ApiResponse<>(status.value(), message, workspaces);
-		return ResponseEntity.status(status).body(apiResponse);
+		ApiResponse<List<WorkspaceResponseDTO>> apiResponse = new ApiResponse<>(HttpStatus.OK.value(), message, workspaces);
+		return ResponseEntity.ok(apiResponse); 
 	}
 }
