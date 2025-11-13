@@ -1,25 +1,25 @@
 package com.jonathan.todo.dto.response;
 
-import java.time.LocalDateTime;
+import java.time.Instant;
 
 public class RegisterResponse {
-    private final Integer userId;
+    private final Long userId;
     private final String username;
-    private final LocalDateTime createdAt;
+    private final Instant createdAt;
 
-	public RegisterResponse(Integer userId, String username,LocalDateTime createdAt){
+	public RegisterResponse(Long userId, String username,Instant createdAt){
 		this.userId = userId;
 		this.username = username;
 		this.createdAt = createdAt;
 	}
 	
-	public Integer getUserId() {
+	public Long getUserId() {
 		return userId;
 	}
 	public String getUsername() {
 		return username;
 	}
-	public LocalDateTime getCreatedAt() {
+	public Instant getCreatedAt() {
 		return createdAt;
 	}
 

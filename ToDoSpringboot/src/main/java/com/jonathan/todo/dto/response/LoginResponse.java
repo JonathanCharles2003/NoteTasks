@@ -2,15 +2,15 @@ package com.jonathan.todo.dto.response;
 
 
 public class LoginResponse {
-	private final Integer userId;
+	private final Long userId;
 	private final String username;
 	
-	public LoginResponse(Integer userId, String username) {
+	public LoginResponse(Long userId, String username) {
 		this.userId = userId;
 		this.username = username;
 	}
 	
-	public Integer getUserId() {
+	public Long getUserId() {
 		return userId;
 	}
 	public String getUsername() {
