@@ -35,7 +35,7 @@ public class AuthService {
 			User user = new User();
 			user.setUsername(request.getUsername());
 			String hashedPassword = passwordEncoder.encode(request.getPassword());
-			user.setPassword(hashedPassword);
+			user.setPasswordHash(hashedPassword);
 			User savedUser = userService.save(user);
 			return new RegisterResponse(savedUser.getUserId(), savedUser.getUsername(), savedUser.getCreatedAt());
 		}
@@ -46,7 +46,7 @@ public class AuthService {
 	
 	public LoginResponse loginUser(LoginRequest request) {
 		Optional<User> optUser = userService.getUserByName(request.getUsername());
-		if(optUser.isEmpty() || !passwordEncoder.matches(request.getPassword(), optUser.get().getPassword())) {
+		if(optUser.isEmpty() || !passwordEncoder.matches(request.getPassword(), optUser.get().getPasswordHash())) {
 	            throw new InvalidCredentialsException(messageUtil.getMessage("user.invalid.credentials"));
 
 		}

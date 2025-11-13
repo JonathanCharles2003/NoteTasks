@@ -1,6 +1,6 @@
 package com.jonathan.todo.model;
 
-import java.time.LocalDateTime;
+import java.time.Instant;
 
 import org.springframework.data.annotation.CreatedDate;
 import org.springframework.data.annotation.LastModifiedDate;
@@ -16,6 +16,10 @@ import jakarta.persistence.Id;
 import jakarta.persistence.JoinColumn;
 import jakarta.persistence.ManyToOne;
 import jakarta.persistence.Table;
+import jakarta.validation.constraints.NotBlank;
+import jakarta.validation.constraints.NotNull;
+import jakarta.persistence.ForeignKey;
+
 
 @Entity
 @Table(name = "workspace")
@@ -25,50 +29,73 @@ public class Workspace {
 	@GeneratedValue(strategy = GenerationType.IDENTITY)
 	private Long workspaceId;
 	
+	@NotNull
 	@ManyToOne(fetch = FetchType.LAZY)
-	@JoinColumn(name = "user_id", nullable = false)
+	@JoinColumn(name = "user_id", nullable = false, foreignKey = @ForeignKey(name = "fk_workspace_user"))
 	private User user;
 	
-	@Column(nullable = false, length = 100)
+	@NotBlank
+	@Column(name = "workspace_name", nullable = false, length = 100)
 	private String workspaceName;
 	
 	@CreatedDate
-	@Column(nullable = false, updatable = false)
-	private LocalDateTime createdAt;
+	@Column(name = "created_at", nullable = false, updatable = false)
+	private Instant createdAt;
 	
 	@LastModifiedDate
-	private LocalDateTime updatedAt;
+	@Column(name = "updated_at", nullable = false)
+	private Instant updatedAt;
 	
-	private LocalDateTime deletedAt;
+	@Column(name = "deleted_at")
+	private Instant deletedAt;
 
 	public Long getWorkspaceId() {
 		return workspaceId;
 	}
-	public User getUser() {
-		return user;
-	}
-	public void setUser(User user) {
-		this.user = user;
-	}
-	public String getWorkspaceName() {
-		return workspaceName;
-	}
-	public void setWorkspaceName(String workspaceName) {
-		this.workspaceName = workspaceName;
-	}
-	public LocalDateTime getCreatedAt() {
-		return createdAt;
-	}
-	public LocalDateTime getUpdatedAt() {
-		return updatedAt;
-	}
-	public LocalDateTime getDeletedAt() {
-		return deletedAt;
-	}
-	public void setDeletedAt(LocalDateTime deletedAt) {
-		this.deletedAt = deletedAt;
-	}
+
 	public void setWorkspaceId(Long workspaceId) {
 		this.workspaceId = workspaceId;
 	}
+
+	public User getUser() {
+		return user;
+	}
+
+	public void setUser(User user) {
+		this.user = user;
+	}
+
+	public String getWorkspaceName() {
+		return workspaceName;
+	}
+
+	public void setWorkspaceName(String workspaceName) {
+		this.workspaceName = workspaceName;
+	}
+
+	public Instant getCreatedAt() {
+		return createdAt;
+	}
+
+	public void setCreatedAt(Instant createdAt) {
+		this.createdAt = createdAt;
+	}
+
+	public Instant getUpdatedAt() {
+		return updatedAt;
+	}
+
+	public void setUpdatedAt(Instant updatedAt) {
+		this.updatedAt = updatedAt;
+	}
+
+	public Instant getDeletedAt() {
+		return deletedAt;
+	}
+
+	public void setDeletedAt(Instant deletedAt) {
+		this.deletedAt = deletedAt;
+	}
+
+	
 }
