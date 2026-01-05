@@ -23,8 +23,13 @@ public class UserService {
 		return userRepo.findByUsername(username);	
 	}
 	
+	public Optional<User> getUserById(Long userId) {
+		return userRepo.findById(userId);
+	}
+	
 	public boolean checkUserExists(String username) {
 		return userRepo.existsByUsername(username);
 	}
+	
 	
 }

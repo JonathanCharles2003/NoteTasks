@@ -2,6 +2,7 @@ package com.jonathan.todo.model;
 
 import java.time.Instant;
 
+import org.hibernate.annotations.SQLRestriction;
 import org.springframework.data.annotation.CreatedDate;
 import org.springframework.data.annotation.LastModifiedDate;
 import org.springframework.data.jpa.domain.support.AuditingEntityListener;
@@ -16,14 +17,23 @@ import jakarta.persistence.Id;
 import jakarta.persistence.JoinColumn;
 import jakarta.persistence.ManyToOne;
 import jakarta.persistence.Table;
+import jakarta.persistence.UniqueConstraint;
 import jakarta.validation.constraints.NotBlank;
 import jakarta.validation.constraints.NotNull;
 import jakarta.persistence.ForeignKey;
 
-
 @Entity
-@Table(name = "workspace")
+@SQLRestriction("deleted_at IS NULL")
+@Table(
+    name = "workspace",
+    uniqueConstraints = @UniqueConstraint(
+        name = "uk_workspace_user_name",
+        columnNames = {"user_id", "workspace_name"}
+    )
+)
+
 @EntityListeners(AuditingEntityListener.class)
+
 public class Workspace {
 	@Id
 	@GeneratedValue(strategy = GenerationType.IDENTITY)
