@@ -1,5 +1,6 @@
 package com.jonathan.todo.exception;
 
+import java.time.LocalDateTime;
 import java.util.stream.Collectors;
 
 import org.springframework.http.HttpStatus;
@@ -39,6 +40,19 @@ public class GlobalExceptionHandler {
 	
 	@ExceptionHandler(Exception.class)
 	public ResponseEntity<ApiError> handleUnexpectedExceptions(Exception ex, HttpServletRequest request) {
+//	    // Log everything useful for debugging
+//	    System.err.println("=== UNEXPECTED EXCEPTION ===");
+//	    System.err.println("Timestamp      : " + LocalDateTime.now());
+//	    System.err.println("Request URI    : " + request.getRequestURI());
+//	    System.err.println("HTTP Method    : " + request.getMethod());
+//	    System.err.println("Query String   : " + request.getQueryString());
+//	    System.err.println("Remote Address : " + request.getRemoteAddr());
+//	    System.err.println("Exception Type : " + ex.getClass().getName());
+//	    System.err.println("Message        : " + ex.getMessage());
+//	    
+//	    // Print full stack trace
+//	    ex.printStackTrace();
+
 		String errorMessage = messageUtil.getMessage("error.unexpected");
 	    ApiError error = new ApiError(HttpStatus.INTERNAL_SERVER_ERROR.value(),HttpStatus.INTERNAL_SERVER_ERROR.getReasonPhrase(),
 	    		errorMessage,request.getRequestURI());
