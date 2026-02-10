@@ -52,17 +52,17 @@ public class WorkspaceServiceImpl implements WorkspaceService {
 	
     private String normalizeAndValidateName(String name) {
         if (name == null) {
-            throw new BadRequestException("workspace.name.required");
+            throw new BadRequestException(messageUtil.getMessage("workspace.name.required"));
         }
 
         String normalized = name.strip();
 
         if (normalized.isEmpty()) {
-            throw new BadRequestException("workspace.name.empty");
+            throw new BadRequestException(messageUtil.getMessage("workspace.name.required"));
         }
 
         if (normalized.length() > 50) {
-            throw new BadRequestException("workspace.name.toolong");
+            throw new BadRequestException(messageUtil.getMessage("workspace.name.maxlength"));
         }
 
         return normalized;

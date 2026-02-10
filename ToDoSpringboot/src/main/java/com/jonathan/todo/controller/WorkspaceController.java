@@ -43,8 +43,8 @@ public class WorkspaceController {
 	}
 	
 	@PostMapping 
-	public ResponseEntity<ApiResponse<WorkspaceResponseDTO>> createWorkspace(@RequestHeader("X-User-Id") Long userId, @Valid @RequestBody WorkspaceRequestDTO request){ //check if theres a better way to actually get the userId// check if the naming is fine
-		WorkspaceResponseDTO workspace = workspaceService.createWorkspaceForUser(request, userId); //pass fields ig for god knows why???
+	public ResponseEntity<ApiResponse<WorkspaceResponseDTO>> createWorkspace(@RequestHeader("X-User-Id") Long userId, @Valid @RequestBody WorkspaceRequestDTO request){ 
+		WorkspaceResponseDTO workspace = workspaceService.createWorkspaceForUser(request, userId); 
 		String message = messageUtil.getMessage("workspace.create.success");
 		ApiResponse<WorkspaceResponseDTO> apiResponse = new ApiResponse<>(HttpStatus.CREATED.value(),message,workspace);
 		return ResponseEntity.status(HttpStatus.CREATED).body(apiResponse);
